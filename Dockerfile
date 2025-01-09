@@ -1,21 +1,32 @@
-# Use an official Node.js runtime as the base image
-FROM node:18
+# Stage 1: Build stage
+FROM node:18 AS builder
 
-# Set the working directory in the container
+# Set the working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json to the working directory
+# Copy package.json and package-lock.json for dependency installation
 COPY package*.json ./
 
-# Install application dependencies
+# Install dependencies
 RUN npm install
 
-# Copy the rest of the application files to the working directory
+# Copy the entire application source code
 COPY . .
 
-# Expose the port the app runs on
+# Stage 2: Production stage
+FROM node:18-alpine AS runtime
+
+# Set the working directory
+WORKDIR /app
+
+# Copy only the necessary files from the build stage
+COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/dist ./dist 
+COPY --from=builder /app/index.js ./ 
+
+# Expose the port the app will run on
 EXPOSE 3000
 
-# Command to start the application
+# Set the command to run the application
 CMD ["node", "index.js"]
-
