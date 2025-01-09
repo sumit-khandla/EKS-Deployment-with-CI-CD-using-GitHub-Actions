@@ -7,7 +7,7 @@ app.use(express.json());
 
 // Root endpoint
 app.get('/', (req, res) => {
-    res.send('Hello, Node.js API!');
+    res.send('Hello, EKS CI-CD GitHub API!');
 });
 
 // Sample GET endpoint
