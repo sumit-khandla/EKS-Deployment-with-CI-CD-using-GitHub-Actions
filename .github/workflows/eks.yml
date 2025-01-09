@@ -75,7 +75,7 @@ jobs:
       - name: Deploy to Kubernetes
         run: |
           ls -al
-           kubectl rollout restart deployment/sumit-prod-deployment
-           kubectl rollout status deployment/sumit-prod-deployment
+           kubectl rollout restart deployment/sumit-eks-deployment
+           kubectl rollout status deployment/sumit-eks-deployment
            kubectl apply -f node-api.yaml
   
